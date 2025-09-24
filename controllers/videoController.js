@@ -21,6 +21,7 @@ class videoController {
             return res.status(500).json({ message: "Server error", error: err });
         }
     }
+
     async getVideoById(req, res) {
         try {
             const { id } = req.params;
@@ -36,6 +37,7 @@ class videoController {
             return res.status(500).json({ message: "Server error", error: err });
         }
     }
+
     async deleteVideo(req, res) {
         try {
             const userId = req.user.id;
@@ -136,7 +138,6 @@ class videoController {
             return res.status(500).json({ message: "Server error", error: err });
         }
     }
-
     async getVideosByUploaderId(req, res) {
         try {
             const id = req.params.id
@@ -168,7 +169,34 @@ class videoController {
             return res.status(500).json({ message: "Server error", error: err });
         }
     }
+    
+    async addComentsOnVideo(req, res) {
+        try {
+            const userId = req.user.id;
+            const videoId = req.params.id;
+            const {comments} = req.body;
 
+            const FindVideo = await model.getVideoById(videoId)
+            if (!FindVideo) return res.status(400).json({ message: "Video Not Found" });
+            const videoOwnerId = FindVideo.createdBy;
+            // console.log(videoOwnerId)
+            const blockedByUser = await model.isBlocked(videoOwnerId, userId)
+            const blockedByOwner = await model.isBlocked(userId, videoOwnerId)
+
+            if (blockedByOwner || blockedByUser) return res.status(403).json({ message: "You are blocked from this action" });
+
+            if (!videoId) return res.status(400).json({ message: "Video Id required" })
+            if (!comments) return res.status(400).json({ message: "Comment is required" })
+                
+            const addComment = await model.addComment(videoId, userId, comments)
+            await model.updateCommentsCount("+", videoId)
+
+            return res.status(200).json({ message: "Comment Added Successfully", results: addComment })
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error", error: err });
+        }
+    }
 
 }
 

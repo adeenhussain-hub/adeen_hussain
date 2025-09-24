@@ -5,6 +5,13 @@ const discoverRoutes = require("./routes/discoverRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const morgan = require('morgan')
+const cors = require('cors')
+
+app.use(cors({
+  origin: "*",   // allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // allow all common methods
+  allowedHeaders: ["Content-Type", "Authorization"] // allow common headers
+}));
 
 app.use(express.json());
 app.use(morgan('dev'))

@@ -1,0 +1,598 @@
+{
+	"info": {
+		"_postman_id": "6b5b5761-96e8-4eb2-b29f-495f851f0371",
+		"name": "Adeen",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46148331"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"salman\",\r\n    \"email\":\"salman@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTg1NDAwNTUsImV4cCI6MTc1OTE0NDg1NX0.XbZE9mcVrEA9o4iynsjT1cPccLEHvLrIdw0EkMk0ziU",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"salman@gmail.com\",\r\n    \"password\":\"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "follow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/12/follow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"12",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "block",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/10/block",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unblock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/10/unblock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10",
+								"unblock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unfollow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MzY2MzcsImV4cCI6MTc1OTE0MTQzN30.kbmND24bGo3MWPjeXvY5dKf1HMVbXC39VefpSdR2-i8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/10/unfollow",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10",
+								"unfollow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "followings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/10/followings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10",
+								"followings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "followers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/11/followers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"11",
+								"followers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/10/stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"10",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Videos",
+			"item": [
+				{
+					"name": "postVideo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTg1NDAwNTUsImV4cCI6MTc1OTE0NDg1NX0.XbZE9mcVrEA9o4iynsjT1cPccLEHvLrIdw0EkMk0ziU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "jhello",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "diwhdknk cmqd oq",
+									"type": "text"
+								},
+								{
+									"key": "videoPath",
+									"type": "file",
+									"src": "postman-cloud:///1f097a76-438e-4bf0-9395-41a926c278e5"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/video/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/video/by/1/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"by",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/video/search?query=umer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "umer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Del Video",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTg1NDQ2MzQsImV4cCI6MTc1ODU0NTUzNH0.xMIZ7lZ6cEXi6WBNFek1IKLQQobYkMrC2yl2SM29jLI",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/video/delete/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"delete",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/video/21/like",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"21",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unlike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/video/21/unlike",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"21",
+								"unlike"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getVideosByUploaderId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/video/10/videos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"10",
+								"videos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "liked-videos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/video/1/liked-videos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"video",
+								"1",
+								"liked-videos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "discover",
+			"item": [
+				{
+					"name": "showFeed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/discover/showfeed?limit=15&page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"discover",
+								"showfeed"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "15"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trending",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTg1MjY5MTUsImV4cCI6MTc1OTEzMTcxNX0.PQ_RaFvUXdZvBsjQxBLHTj9CxdKllH_KF5HfN4EjHRM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/discover/trending?limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"discover",
+								"trending"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "suggestedUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

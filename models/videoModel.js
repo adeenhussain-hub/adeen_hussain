@@ -76,7 +76,6 @@ class videoModel {
             });
         });
     }
-
     async videosUploaderById(id) {
         return new Promise((resolve, reject) => {
             db.query('SELECT u.username as Uploader, v.title,v.description,v.url,v.createdBy from videos v Join users u on u.id = ? ', [id], (err, result) => {
@@ -85,7 +84,6 @@ class videoModel {
             });
         });
     }
-
     async videosLikedById(id) {
         return new Promise((resolve, reject) => {
             db.query('SELECT v.id, v.title, v.description, v.url, v.likesCount, v.createdAt,u.id AS uploaderId, u.username AS uploaderName FROM video_likes l JOIN videos v ON l.videoId = v.id JOIN users u ON v.createdBy = u.id WHERE l.userId = ?', [id], (err, result) => {
@@ -99,6 +97,26 @@ class videoModel {
             db.query('Select * from blocks where blockerId = ? AND blockedId = ?', [blockdBy,userID], (err, result) => {
                 if (err) return reject(err);
                 resolve(result[0]);
+            });
+        });
+    }
+    async addComment(videoId, userId, content) {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO comments (videoId, userId, content) VALUES (?, ?, ?)`;
+            db.query(query, [videoId, userId, content], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    }
+        async updateCommentsCount(sign, videoId) {
+        if (sign !== "+" && sign !== "-") {
+            throw new Error("Invalid sign, must be '+' or '-'");
+        }
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE videos Set commentsCount = commentsCount ${sign} 1 where id=?`, [videoId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
             });
         });
     }

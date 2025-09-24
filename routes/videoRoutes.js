@@ -18,5 +18,6 @@ router.post('/:id/unlike', authMiddleware, videoController.unlikeVideo)
 router.get("/by/:id", videoController.getVideoById);
 router.get('/:id/videos', videoController.getVideosByUploaderId)
 router.get('/:id/liked-videos', videoController.videosLikedById)
+router.post('/:id/addcomments',authMiddleware, videoController.addComentsOnVideo)
 
 module.exports = router;

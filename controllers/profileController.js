@@ -65,14 +65,15 @@ class profileController {
     async getAllFollowingsByID(req, res) {
         try {
             const id = req.params.id
-            const followings = await model.getfollowingsById(id);
 
-            const blockedByUser = await model.isBlocked(id, req.user.id)
-            const blockedByOwner = await model.isBlocked(req.user.id, id)
-
-            if (blockedByOwner || blockedByUser) {
-                return res.status(403).json({ message: "You are blocked from this action" });
+            if (req.headers.authorization) {
+                const blockedByUser = await model.isBlocked(id, req.user.id)
+                const blockedByOwner = await model.isBlocked(req.user.id, id)
+                if (blockedByOwner || blockedByUser) {
+                    return res.status(403).json({ message: "You are blocked from this action" });
+                }
             }
+            const followings = await model.getfollowingsById(id);
 
             if (followings.length === 0) return res.status(200).json({ message: "User is not following anyone" });
 
@@ -86,16 +87,15 @@ class profileController {
     async getAllFollowerssByID(req, res) {
         try {
             const id = req.params.id
-            const followings = await model.getFollowersById(id);
-            const isBlocked = await model.isBlocked(id,req.user.id)
 
-            const blockedByUser = await model.isBlocked(id, req.user.id)
-            const blockedByOwner = await model.isBlocked(req.user.id, id)
-
-            if (blockedByOwner || blockedByUser) {
-                return res.status(403).json({ message: "You are blocked from this action" });
+            if (req.headers.authorization) {
+                const blockedByUser = await model.isBlocked(id, req.user.id)
+                const blockedByOwner = await model.isBlocked(req.user.id, id)
+                if (blockedByOwner || blockedByUser) {
+                    return res.status(403).json({ message: "You are blocked from this action" });
+                }
             }
-
+            const followings = await model.getFollowersById(id);
 
             return res.status(200).json({ message: "Here is all Followers Of User", results: followings });
         } catch (err) {
@@ -107,13 +107,14 @@ class profileController {
     async stats(req, res) {
         try {
             const id = req.params.id
-            const result = await model.getStats(id);
-            const blockedByUser = await model.isBlocked(id, req.user.id)
-            const blockedByOwner = await model.isBlocked(req.user.id, id)
-
-            if (blockedByOwner || blockedByUser) {
-                return res.status(403).json({ message: "You are blocked from this action" });
+            if (req.headers.authorization) {
+                const blockedByUser = await model.isBlocked(id, req.user.id)
+                const blockedByOwner = await model.isBlocked(req.user.id, id)
+                if (blockedByOwner || blockedByUser) {
+                    return res.status(403).json({ message: "You are blocked from this action" });
+                }
             }
+            const result = await model.getStats(id);
             if (result.length === 0) return res.status(200).json({ message: "Error Loading" });
 
             return res.status(200).json({ message: "Successfully Loaded", results: result });
