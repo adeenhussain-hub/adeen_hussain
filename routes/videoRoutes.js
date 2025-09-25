@@ -10,7 +10,7 @@ router.post('/create', authMiddleware, upload.single("videoPath"), [
     body("description").optional().isLength({ max: 1000 }).withMessage("Description must be less than 1000 characters"),
 ], videoController.createVideo)
 
-router.get('/search',authMiddleware, videoController.searchVideos)
+router.get('/search', authMiddleware, videoController.searchVideos)
 router.delete("/delete/:id", authMiddleware, videoController.deleteVideo);
 router.post('/:id/like', authMiddleware, videoController.likeVideo)
 router.post('/:id/unlike', authMiddleware, videoController.unlikeVideo)
@@ -18,6 +18,7 @@ router.post('/:id/unlike', authMiddleware, videoController.unlikeVideo)
 router.get("/by/:id", videoController.getVideoById);
 router.get('/:id/videos', videoController.getVideosByUploaderId)
 router.get('/:id/liked-videos', videoController.videosLikedById)
-router.post('/:id/addcomments',authMiddleware, videoController.addComentsOnVideo)
+router.post('/:id/addcomments', authMiddleware, videoController.addComentsOnVideo)
+router.post('/:id/deletecomments', authMiddleware, videoController.deleteComment)
 
 module.exports = router;

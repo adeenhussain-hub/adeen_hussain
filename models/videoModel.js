@@ -70,7 +70,7 @@ class videoModel {
         return new Promise((resolve, reject) => {
             const sql = `SELECT v.id, v.title, v.description, v.url, v.likesCount, v.createdAt,u.id AS uploaderId, u.username AS uploaderName FROM videos v JOIN users u ON v.createdBy = u.id WHERE v.title LIKE ? OR u.username LIKE ? AND u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?) AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) ORDER BY v.createdAt DESC LIMIT ? OFFSET ?;`;
             const searchQuery = `%${query}%`;
-            db.query(sql, [searchQuery, searchQuery,userId,userId, limit, offset], (err, result) => {
+            db.query(sql, [searchQuery, searchQuery, userId, userId, limit, offset], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             });
@@ -94,7 +94,7 @@ class videoModel {
     }
     async isBlocked(blockdBy, userID) {
         return new Promise((resolve, reject) => {
-            db.query('Select * from blocks where blockerId = ? AND blockedId = ?', [blockdBy,userID], (err, result) => {
+            db.query('Select * from blocks where blockerId = ? AND blockedId = ?', [blockdBy, userID], (err, result) => {
                 if (err) return reject(err);
                 resolve(result[0]);
             });
@@ -109,16 +109,36 @@ class videoModel {
             });
         });
     }
-        async updateCommentsCount(sign, videoId) {
+    async updateCommentsCount(sign, videoId, createdBy) {
         if (sign !== "+" && sign !== "-") {
             throw new Error("Invalid sign, must be '+' or '-'");
         }
         return new Promise((resolve, reject) => {
             db.query(`UPDATE videos Set commentsCount = commentsCount ${sign} 1 where id=?`, [videoId], (err, results) => {
                 if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+    async deleteComment(commentId) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM comments WHERE id = ?`;
+            db.query(query, [commentId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    }
+    async getCommentById(commentId) {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT id, videoId, userId, content, createdAt FROM comments WHERE id = ?`;
+            db.query(query, [commentId], (err, results) => {
+                if (err) return reject(err);
                 resolve(results[0]);
             });
         });
     }
+
+
 }
 module.exports = videoModel;

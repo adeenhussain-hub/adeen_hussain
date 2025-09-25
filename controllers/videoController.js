@@ -169,12 +169,12 @@ class videoController {
             return res.status(500).json({ message: "Server error", error: err });
         }
     }
-    
+
     async addComentsOnVideo(req, res) {
         try {
             const userId = req.user.id;
             const videoId = req.params.id;
-            const {comments} = req.body;
+            const { comments } = req.body;
 
             const FindVideo = await model.getVideoById(videoId)
             if (!FindVideo) return res.status(400).json({ message: "Video Not Found" });
@@ -187,11 +187,42 @@ class videoController {
 
             if (!videoId) return res.status(400).json({ message: "Video Id required" })
             if (!comments) return res.status(400).json({ message: "Comment is required" })
-                
-            const addComment = await model.addComment(videoId, userId, comments)
+
+             await model.addComment(videoId, userId, comments)
             await model.updateCommentsCount("+", videoId)
 
-            return res.status(200).json({ message: "Comment Added Successfully", results: addComment })
+            return res.status(200).json({ message: "Comment Added Successfully" })
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error", error: err });
+        }
+    }
+
+    async deleteComment(req, res) {
+        try {
+            const userId = req.user.id;
+            const commentId = req.params.id; 
+
+            const comment = await model.getCommentById(commentId);
+            if (!comment) {
+                return res.status(404).json({ message: "Comment Not Found" });
+            }
+
+            const video = await model.getVideoById(comment.videoId);
+            if (!video) return res.status(404).json({ message: "Video Not Found" });
+
+            const videoOwnerId = video.createdBy;
+
+            const blockedByUser = await model.isBlocked(videoOwnerId, userId);
+            const blockedByOwner = await model.isBlocked(userId, videoOwnerId);
+            if (blockedByOwner || blockedByUser) return res.status(403).json({ message: "You are blocked from this action" });
+
+            if (comment.userId !== userId && video.createdBy !== userId) return res.status(403).json({ message: "Unauthorized" }) 
+
+            await model.deleteComment(commentId);
+            await model.updateCommentsCount("-", comment.videoId);
+
+            return res.status(200).json({ message: "Comment Deleted Successfully" });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: "Server error", error: err });
