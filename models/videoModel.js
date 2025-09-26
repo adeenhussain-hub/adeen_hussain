@@ -100,10 +100,10 @@ class videoModel {
             });
         });
     }
-    async addComment(videoId, userId, content) {
+    async addComment(videoId, userId, content, parentId) {
         return new Promise((resolve, reject) => {
-            const query = `INSERT INTO comments (videoId, userId, content) VALUES (?, ?, ?)`;
-            db.query(query, [videoId, userId, content], (err, result) => {
+            const query = `INSERT INTO comments (videoId, userId, content,parentCommentId) VALUES (?, ?, ?, ?)`;
+            db.query(query, [videoId, userId, content, parentId], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             });
@@ -138,7 +138,78 @@ class videoModel {
             });
         });
     }
+    async getAllCommentsOnVideo(videoId, userId, limit, offset) {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT c.id, c.content,c.likesCount, c.createdAt, u.id AS userId, u.username FROM comments c JOIN users u ON c.userId = u.id WHERE c.videoId = ? AND c.parentCommentId IS NULL AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) AND u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?) ORDER BY c.createdAt DESC LIMIT ? OFFSET ?`;
+            db.query(query, [videoId, userId, userId, limit, offset], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+    async isCommentLiked(commentId, userID) {
+        return new Promise((resolve, reject) => {
+            db.query('Select * from commentlikes where commentId = ? AND userId = ?', [commentId, userID], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]);
+            });
+        });
+    }
+    async likeComment(commentId, userId) {
+        return new Promise((resolve, reject) => {
+            db.query('INSERT INTO commentlikes (commentId,userId) VALUES(?,?)', [commentId, userId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
+        });
+    }
+    async updateCommentsLikesCount(sign, commentId) {
 
+        if (sign !== "+" && sign !== "-") {
+            throw new Error("Invalid sign, must be '+' or '-'");
+        }
+        return new Promise((resolve, reject) => {
+            db.query(`Update comments Set likesCount = likesCount ${sign} 1 where id=?`, commentId, (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
+        });
+    }
+    async unlikeComment(commentId, userId) {
+        return new Promise((resolve, reject) => {
+            db.query('Delete from commentlikes where commentId = ? and userId =?', [commentId, userId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
 
-}
+            })
+        })
+    }
+    async isVideoLiked(videoId, userId) {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM video_likes WHERE videoId = ? AND userId = ?', [videoId, userId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]);
+            });
+        });
+    }
+    async editComment(content, commentID) {
+        return new Promise((resolve, reject) => {
+            const query = `Update comments SET content = ? where id=?`;
+            db.query(query, [content, commentID], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    }
+    async getAllRepliesOnCommentsById(commentID,userId,limit, offset) {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT c.id, u.username , c.userId, c.content,c.likesCount, c.createdAt FROM comments c JOIN users u ON u.id = c.userId WHERE c.parentCommentId = ? AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) AND u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?)  ORDER BY c.createdAt ASC;`;
+            db.query(query, [commentID, userId, userId,limit, offset], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+
+}   
 module.exports = videoModel;
