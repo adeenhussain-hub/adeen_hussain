@@ -3,10 +3,10 @@ const { body, header, param } = require("express-validator");
 const videoController = require("../controllers/videoController");
 const authMiddleware = require('../middlewares/authMiddleware');
 const validate = require("../middlewares/validate");
-const upload = require('../middlewares/uploadVideoMiddleware');
+const {handleSingleUpload} = require('../middlewares/uploadMiddleware');
 const router = express.Router();
 
-router.post('/create', authMiddleware, upload.single("videoPath"), [
+router.post('/create', authMiddleware, handleSingleUpload("videoPath"), [
     body("title").notEmpty().withMessage("Title is required").isLength({ max: 255 }).withMessage("Title must be less than 255 characters"),
     body("description").optional().isLength({ max: 1000 }).withMessage("Description must be less than 1000 characters"),
 ], validate, videoController.createVideo)
@@ -40,5 +40,7 @@ router.post('/:id/togglecommentlike', authMiddleware, videoController.toggleComm
 router.post('/:id/updatecomments', authMiddleware, videoController.editComment)
 
 router.get('/comment/:id/replies', authMiddleware, videoController.getCommentsReplies)
+
+router.post('/:id/view', authMiddleware, videoController.viewVideo)
 
 module.exports = router;

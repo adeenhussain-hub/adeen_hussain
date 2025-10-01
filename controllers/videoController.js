@@ -1,5 +1,6 @@
 const videoModel = require("../models/videoModel");
 const { validationResult } = require("express-validator");
+// const {startswith}
 
 const model = new videoModel();
 
@@ -10,8 +11,14 @@ class videoController {
             const createdBy = req.user.id;
             // console.log(createdBy);
 
-            const { title, description } = req.body
+            const { title, description } = req.body;
             const videoPath = req.file ? `/uploads/${req.file.filename}` : null
+            console.log(req.file.mimetype);
+
+            if (!req.file.mimetype.startsWith('video/')) return res.status(400).json({ message: "Only Video is Allowed" })
+
+            if (!req.file.mimetype.startsWith('video/')) return res.status(400).json({ message: "Only Video is Allowed" })
+
             if (!videoPath) return res.status(400).json({ message: "Video Required" })
 
             await model.addVideo({ title, description, videoPath: videoPath, createdBy });
@@ -354,6 +361,44 @@ class videoController {
         }
 
 
+    }
+    async viewVideo(req, res) {
+        try {
+            const userId = req.user.id;
+            const videoId = req.params.id;
+
+            const FindVideo = await model.getVideoById(videoId)
+            if (!FindVideo) {
+                return res.status(400).json({ message: "Video Not Found" });
+            }
+            const videoOwnerId = FindVideo.createdBy;
+            const blockedByUser = await model.isBlocked(videoOwnerId, userId)
+            const blockedByOwner = await model.isBlocked(userId, videoOwnerId)
+
+            if (blockedByOwner || blockedByUser) {
+                return res.status(403).json({ message: "You are blocked from this action" });
+            }
+            const lastView = await model.getViewRecordById(userId, videoId)
+
+            if (lastView) {
+                const lastViewedAt = new Date(lastView.viewed_at);
+                const now = new Date();
+                const diffHours = (now - lastViewedAt) / (1000 * 60 * 60); // Convert ms → hours
+
+                if (diffHours < 24) {
+                    return res.status(200).json({ message: "View already counted within 24 hours" });
+                }
+            }
+
+            await model.addView(userId, videoId)
+            await model.increamentViewCount(videoId)
+
+            return res.status(201).json({ message: "Video Viewed Successfully" })
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error", error: err });
+
+        }
     }
 }
 

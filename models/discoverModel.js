@@ -27,9 +27,9 @@ class discoverModel {
             });
         });
     }
-    async showTrendingUsers(userId) {
+    async showTrendingUsers(userId,limit) {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT u.id, u.username, COUNT(vl.id) AS recentLikes FROM users u JOIN videos v ON u.id = v.createdBy JOIN video_likes vl ON v.id = vl.videoId WHERE vl.createdAt >=NOW() - INTERVAL 7 DAY and u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?) AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) GROUP BY u.id, u.username ORDER BY recentLikes DESC LIMIT 10 `,[userId,userId], (err, result) => {
+            db.query(`SELECT u.id, u.username, COUNT(vl.id) AS recentLikes FROM users u JOIN videos v ON u.id = v.createdBy JOIN video_likes vl ON v.id = vl.videoId WHERE vl.createdAt >=NOW() - INTERVAL 7 DAY and u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?) AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) GROUP BY u.id, u.username ORDER BY recentLikes DESC LIMIT ? `,[userId,userId,limit], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             });

@@ -201,15 +201,38 @@ class videoModel {
             });
         });
     }
-    async getAllRepliesOnCommentsById(commentID,userId,limit, offset) {
+    async getAllRepliesOnCommentsById(commentID, userId, limit, offset) {
         return new Promise((resolve, reject) => {
             const query = `SELECT c.id, u.username , c.userId, c.content,c.likesCount, c.createdAt FROM comments c JOIN users u ON u.id = c.userId WHERE c.parentCommentId = ? AND u.id NOT IN (SELECT blockedId FROM blocks WHERE blockerId = ?) AND u.id NOT IN (SELECT blockerId FROM blocks WHERE blockedId = ?)  ORDER BY c.createdAt ASC;`;
-            db.query(query, [commentID, userId, userId,limit, offset], (err, results) => {
+            db.query(query, [commentID, userId, userId, limit, offset], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
     }
-
-}   
+    async addView(userId, videoId) {
+        return new Promise((resolve, reject) => {
+            db.query('Insert INTO video_views (user_id,video_id) values(?,?)', [userId, videoId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+    async increamentViewCount(videoId) {
+        return new Promise((resolve, reject) => {
+            db.query('update videos set viewsCount = viewsCount + 1 where id =?', [videoId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+    async getViewRecordById(userId,videoId) {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT viewed_at FROM video_views WHERE user_id = ? AND video_id = ? ORDER BY viewed_at DESC LIMIT 1', [userId,videoId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
+        });
+    }
+}
 module.exports = videoModel;

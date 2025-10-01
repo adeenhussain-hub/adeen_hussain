@@ -45,11 +45,12 @@ class discoverController {
 
     async suggestedUser(req, res) {
         try {
+            const limit = parseInt(req.query.limit) || 10;
             const userId = req.user.id;
             const userDetails = await model.findUserByID(userId);
 
             const mutualFollowers = await model.showMutualFollowers(userId);
-            const trendingUsers = await model.showTrendingUsers(userId);
+            const trendingUsers = await model.showTrendingUsers(userId,limit);
             if (mutualFollowers.length === 0 ) return res.status(400).json({ message: "Error Loading" });
 
             return res.status(200).json({ message: "Suggested User", mutual_Followers: {results: mutualFollowers,Followed_By: { userID: userDetails.id, user_name: userDetails.username } } ,Trending_Users : trendingUsers} );

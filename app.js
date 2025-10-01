@@ -3,6 +3,7 @@ const app = express();
 const authRoutes = require("./routes/authRoutes");
 const discoverRoutes = require("./routes/discoverRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const storyRoutes = require("./routes/storyRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const morgan = require('morgan')
 const cors = require('cors')
@@ -20,6 +21,7 @@ app.use("/auth", authRoutes);
 app.use("/users", profileRoutes);
 app.use("/video", videoRoutes);
 app.use("/discover", discoverRoutes);
+app.use("/story", storyRoutes);
 
 app.listen(3000, () => {
     console.log("Server running at http://localhost:3000");
