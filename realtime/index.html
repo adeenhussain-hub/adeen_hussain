@@ -1,0 +1,29 @@
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Socket Test</title>
+        <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    </head>
+
+    <body>
+        <script>
+            const socketA = io("http://localhost:3000", {
+                extraHeaders: {
+                    Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZGVlbkBnbWFpbC5jb20iLCJpYXQiOjE3NTkxNDAyODksImV4cCI6MTc1OTc0NTA4OX0.NLSozixKDVPEu8-i1biZkhV9TdCfzmLN8P4Mf4eqHPU"
+                }
+            });
+            socketA.emit("join_chat", { receiverId: 10 });
+
+            socketA.on("receive_message", (msg) => console.log("User1 got:", msg));
+
+            // Delay send by 1 sec so B is ready
+            setTimeout(() => {
+                socketA.emit("send_message", { receiverId: 10, message: "Hello from 1" });
+                socketA.emit("send_message", { receiverId: 10, message: "Hello cknwc w cwncj 1" });
+            }, 1000);
+        </script>
+
+    </body>
+
+    </html>

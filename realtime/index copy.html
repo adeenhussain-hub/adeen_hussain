@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket Test</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+
+<body>
+    <script>
+        const socketB = io("http://localhost:3000", {
+            extraHeaders: {
+                Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTkzMTczNDgsImV4cCI6MTc1OTkyMjE0OH0.-LK-58QKofjIMBcOXTsyZccw3uSh_iGx2S_K03c-BJE"
+            }
+        });
+        socketB.emit("join_chat", { receiverId: 1 });
+
+        socketB.on("receive_message", (msg) => console.log("User10 got:", msg));
+    </script>
+
+</body>
+
+</html>

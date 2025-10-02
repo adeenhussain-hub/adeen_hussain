@@ -23,8 +23,15 @@ app.use("/video", videoRoutes);
 app.use("/discover", discoverRoutes);
 app.use("/story", storyRoutes);
 
-app.listen(3000, () => {
+
+const http = require("http");
+const server = http.createServer(app);
+const { initSocket } = require("./realtime/socket");
+initSocket(server);
+
+server.listen(3000, () => {
     console.log("Server running at http://localhost:3000");
 });
+
 
 module.exports = app;

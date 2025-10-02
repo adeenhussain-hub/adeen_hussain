@@ -7,15 +7,10 @@
 //     }
 // }
 // let s = descendingOrder();
-function digitize(n) {
-  //code here
-  let array = [];
-  let s = n.toString();
-  
-  for(let i = s.length -1; i >=0; i--){ 
-    // s.toInt();
-    array.push(s[i])
+  let string = ['A1','B2','C3','D4','E5'];
+  let result = [];
+  for(let i = 0 ; i>string.length; i++){
+    result.push(string[i])
   }
-    return array.toLocaleString();  
-}
-console.log(digitize(35231))
+  console.log(result)
+  return result;
