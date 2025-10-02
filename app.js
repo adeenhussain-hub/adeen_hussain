@@ -4,14 +4,15 @@ const authRoutes = require("./routes/authRoutes");
 const discoverRoutes = require("./routes/discoverRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const storyRoutes = require("./routes/storyRoutes");
+const msgRoutes = require("./routes/messageRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const morgan = require('morgan')
 const cors = require('cors')
 
 app.use(cors({
-  origin: "*",   // allow all origins
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // allow all common methods
-  allowedHeaders: ["Content-Type", "Authorization"] // allow common headers
+  origin: "*",   
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], 
+  allowedHeaders: ["Content-Type", "Authorization"] 
 }));
 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use("/auth", authRoutes);
 app.use("/users", profileRoutes);
 app.use("/video", videoRoutes);
 app.use("/discover", discoverRoutes);
+app.use("/message", msgRoutes);
 app.use("/story", storyRoutes);
 
 

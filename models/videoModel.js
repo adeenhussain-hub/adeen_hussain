@@ -94,7 +94,7 @@ class videoModel {
     }
     async isBlocked(blockdBy, userID) {
         return new Promise((resolve, reject) => {
-            db.query('Select * from blocks where blockerId = ? AND blockedId = ?', [blockdBy, userID], (err, result) => {
+            db.query('Select * from blocks where (blockerId = ? AND blockedId = ?) OR (blockerId = ? AND blockedId = ?)', [blockdBy, userID, userID,blockdBy], (err, result) => {
                 if (err) return reject(err);
                 resolve(result[0]);
             });

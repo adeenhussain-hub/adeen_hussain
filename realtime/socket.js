@@ -1,7 +1,8 @@
 const { Server, Socket } = require("socket.io");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
-
+const msgModel = require("../models/msgModel");
+const Model = new msgModel();
 function initSocket(server) {
     const io = new Server(server, {
         cors: {
@@ -27,7 +28,7 @@ function initSocket(server) {
             return next(new Error("Unauthorized"));
         }
     });
-
+    const onlineUser = 
     io.on("connection", (socket) => {
         console.log("A user connected", socket.user.id);
         socket.on("join_chat", ({ receiverId }) => {
@@ -44,23 +45,33 @@ function initSocket(server) {
 
         socket.on("send_message", async ({ receiverId, message }) => {
             const senderId = socket.user.id;
+            console.log("Sender from token:", senderId, "Receiver from token:", receiverId);
 
             const roomId = senderId < receiverId
                 ? `room_${senderId}_${receiverId}`
                 : `room_${receiverId}_${senderId}`;
 
-            const msgData = { senderId, receiverId, message }
-            io.to(roomId).emit("receive_message", msgData);
             try {
-                await db.query("INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)",
-                    [senderId, receiverId, message ]
-                );
+                const check = await Model.isblocked(senderId, receiverId)
+                console.log(check);
+
+                if (check.length > 0) {
+                    console.log(`BLOCKED: User ${senderId} -> ${receiverId} | Message NOT sent`);
+                    return socket.emit("error_message", { message: "You are blocked or have blocked this user." });
+                }
+
+                const msgData = { senderId, receiverId, message };
+                io.to(roomId).emit("receive_message", msgData);
+
+                await Model.insertInDB(senderId, receiverId, message)
+
+                console.log(`User ${senderId} sent message to Room ${roomId}: ${message}`);
+
             } catch (err) {
                 console.error("DB save error:", err);
-
             }
-            console.log(`User ${senderId} sent message to Room ${roomId}: ${message}`);
         });
+
 
     })
 }

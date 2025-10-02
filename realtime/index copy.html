@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Socket Test</title>
+    <title>Socket Test - User B</title>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
-
 <body>
-    <script>
-        const socketB = io("http://localhost:3000", {
-            extraHeaders: {
-                Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTkzMTczNDgsImV4cCI6MTc1OTkyMjE0OH0.-LK-58QKofjIMBcOXTsyZccw3uSh_iGx2S_K03c-BJE"
-            }
-        });
-        socketB.emit("join_chat", { receiverId: 1 });
 
-        socketB.on("receive_message", (msg) => console.log("User10 got:", msg));
-    </script>
+<script>
+    const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoidW1lckBnbWFpbC5jb20iLCJpYXQiOjE3NTkzODU5NDksImV4cCI6MTc1OTk5MDc0OX0.ljCUL53A51pm3qmkmKFVy_TekjxaH1zQOrT-cnQvAkM";
+    
+    const RECEIVER_ID = 14; // opposite direction!
+
+    const socketB = io("http://localhost:3000", {
+        extraHeaders: { Authorization: TOKEN }
+    });
+
+    socketB.on("connect", () => {
+        console.log("B connected, joining room...");
+        socketB.emit("join_chat", { receiverId: RECEIVER_ID });
+    });
+
+    socketB.on("receive_message", (msg) => console.log("User B got:", msg));
+
+</script>
 
 </body>
-
 </html>
