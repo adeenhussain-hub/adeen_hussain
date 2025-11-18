@@ -27,6 +27,14 @@ class auth {
             });
         });
     }
+    async getRefresh(email) {
+        return new Promise((resolve, reject) => {
+            db.query('Select refresh_token from users WHERE email = ?', [email], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]);
+            });
+        });
+    }
 
 }
 module.exports = auth;

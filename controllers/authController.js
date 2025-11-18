@@ -33,9 +33,7 @@ class authController {
             }
             const { email, password } = req.body
             const findUser = await AuthModel.findByEmail(email);
-            if (!findUser) {
-                return res.status(400).json({ message: "user not found" });
-            }
+            if (!findUser) return res.status(400).json({ message: "user not found" });
             const verifyPass = await bcrypt.compare(password, findUser.password)
             if (!verifyPass) {
                 return res.status(400).json({ message: "invalid password" });
@@ -57,23 +55,54 @@ class authController {
 
     async refresh(req, res) {
         try {
-            const token = req.headers["authorization"];
-            if (!token) {
+            const refreshToken = req.body.refreshToken;   // or cookie
+
+            if (!refreshToken) {
                 return res.status(400).json({ message: "Refresh token required" });
             }
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const id = decoded.id;
-            const accessToken = generateAccessToken({id:decoded.id,email :decoded.email})
-            // console.log(decoded.email);
-            return res.json({ message: "Access Token Generated",Access_Token: accessToken})
-        } catch (err) {
-            if (err.name === "TokenExpiredError") {
-                return res.status(401).json({ message: "Token Expired" })
-            } else {
-                return res.status(500).json({ message: "Server Error", error: err })
+
+            // 1. Verify refresh token signature
+            let decoded;
+            try {
+                decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+            } catch (err) {
+                return res.status(401).json({ message: "Refresh token invalid or expired" });
             }
+
+            // 2. Check refresh token in DB (to ensure it's not revoked)
+            const stored = await AuthModel.getRefresh(decoded.email);
+
+            if (!stored || stored.refresh_token !== refreshToken) {
+                return res.status(401).json({ message: "Refresh token not found or revoked" });
+            }
+
+            // 3. Generate new access token
+            const newAccessToken = generateAccessToken({
+                id: decoded.id,
+                email: decoded.email
+            });
+
+            // 4. OPTIONAL but recommended: rotate refresh token
+            const newRefreshToken = generateRefreshToken({
+                id: decoded.id,
+                email: decoded.email
+            });
+
+            // 5. Save new refresh token to DB (overwrite old)
+            await AuthModel.insertToken(newRefreshToken, decoded.email);
+
+            return res.json({
+                message: "New tokens issued",
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken
+            });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error", error: err });
         }
     }
+
 }
 
 module.exports = new authController();
