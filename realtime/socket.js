@@ -19,7 +19,7 @@ function initSocket(server) {
         }
 
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
             socket.user = { id: decoded.id, email: decoded.email };
             console.log("Socket auth success:", socket.user.id);
             next();
@@ -28,7 +28,7 @@ function initSocket(server) {
             return next(new Error("Unauthorized"));
         }
     });
-    const onlineUser = 
+    // const onlineUser = 
     io.on("connection", (socket) => {
         console.log("A user connected", socket.user.id);
         socket.on("join_chat", ({ receiverId }) => {

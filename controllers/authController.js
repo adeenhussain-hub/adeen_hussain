@@ -42,7 +42,7 @@ class authController {
             const accessToken = generateAccessToken({ id, email })
             const refreshToken = generateRefreshToken({ id, email })
 
-            await AuthModel.insertToken(refreshToken, email);
+            await AuthModel.updateToken(refreshToken, email);
 
             return res.status(200).json({ message: "Login Successfully", accessToken: accessToken, refreshToken: refreshToken });
 
@@ -89,7 +89,7 @@ class authController {
             });
 
             // 5. Save new refresh token to DB (overwrite old)
-            await AuthModel.insertToken(newRefreshToken, decoded.email);
+            await AuthModel.updateToken(newRefreshToken, decoded.email);
 
             return res.json({
                 message: "New tokens issued",

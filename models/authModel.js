@@ -19,7 +19,7 @@ class auth {
             });
         });
     }
-    async insertToken(token,email) {
+    async updateToken(token,email) {
         return new Promise((resolve, reject) => {
             db.query('UPDATE users SET refresh_token = ? WHERE email = ?', [token,email], (err, result) => {
                 if (err) return reject(err);
